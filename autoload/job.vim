@@ -54,11 +54,8 @@ fun! s:checkdead(job, cb, tid)
 endf
 fun! s:onexit(cb, ch)
     let job = ch_getjob(a:ch)
-    if job_status(job) == 'dead'
-        call a:cb(job, job_info(job)['exitval'])
-    else
-        call timer_start(100, funcref('s:checkdead', [job, a:cb]), {'repeat': 50})
-    endif
+    call assert_true(job_status(job) == 'dead', 'ASSERT')
+    call a:cb(job, job_info(job)['exitval'])
 endf
 " Start a new job
 fun! job#start(cmd, opt)
